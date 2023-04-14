@@ -7,5 +7,5 @@
 # Adding a post
 
 * Add entry to state.posts in index.html
-* Add image for post in img/<id>.png
-* Add actual post text in posts/<id>.html
+* Add image for post in `img/<id>.png`
+* Add actual post text in `posts/<id>.html`
