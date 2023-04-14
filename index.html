@@ -1,0 +1,123 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="lib/main.css">
+    <script src="lib/jquery-3.3.1.js"></script>
+    <script src="lib/ejs.js"></script>
+    <title>Sample Blog Title</title>
+
+    <script>
+      var state = state || {};
+
+      state.posts = [
+        {
+          'title': 'Sample Post',
+          // id must match html file and image name
+          // html file must be /posts/<id>.html
+          // img must be /img/<id>/png
+          'id': 'sample-post',
+          'publish': true,
+          'guest': false,
+        },
+        {
+          'title': 'Sample Guest Post',
+          'id': 'sample-guest-post',
+          'author': 'Guest Author',
+          'publish': true,
+          'guest': true,
+        },
+      ]
+
+      // --------- util ---------- //
+
+      function getQueryStringParam(name, url = window.location.href) {
+        // taken from :
+        // https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+      }
+
+      // --------- templating + routing ---------- //
+
+      let templates = [
+        'sample',
+        'home',
+        'post',
+      ]
+
+      function loadTemplates(){
+        state.templates = state.templates || {};
+        for (let i = 0;  i < templates.length; i++){
+          $.get('/' + templates[i] + '.html').then(function(html){
+            state.templates[templates[i]] = html
+            $(window).trigger('templateLoaded');
+          })
+        }
+      }
+
+      function locationHasChanged(){
+        var newPage = window.location.hash.substring(1);
+        newPage = newPage.split('?')[0];  //removes query string
+        newPage = newPage.split('/')[0]; // only care about top level URL here
+        if (!newPage){
+          newPage = "home"
+        }
+        else {
+          newPage = newPage.slice(1,) // remove "!"
+        }
+        state.page = newPage;
+        renderPage(newPage);
+      }
+
+      function renderPage(page){
+        $('#body').html(ejs.render(
+          state.templates[page],
+          {'state': state},
+        ));
+      }
+
+      // handlers
+      loadedTemplates = 0;
+      $(window).on('templateLoaded', function(){
+        loadedTemplates += 1;
+        if (loadedTemplates == templates.length){
+          locationHasChanged();
+        }
+      });
+
+      $(document).ready(function(){
+        loadTemplates();
+        $(window).on('hashchange', locationHasChanged);
+      });
+
+    </script>
+  </head>
+  <head>
+  </head>
+  <body>
+    <div class="header">
+      <a href="#!home">
+        <div class="main-title">
+          <img src="img/sample-post.png" id="header-logo">
+          <h1>Main Blog Title</h1>
+          <h3>Second Blog Title</h3>
+        </div>
+      </a>
+      <hr class="divider">
+      <div class="navbar">
+        <ul>
+          <li><a href="#!home" class="navbarlink">Home</a></li>
+          <li><a href="#!sample" class="navbarlink">Sample</a></li>
+        </ul>
+      </div>
+    </div>
+    <static>
+      <div id="body">
+      </div>
+  </body>
+</html>

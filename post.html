@@ -1,0 +1,92 @@
+<script>
+  function injectPost(){
+    var post_id = window.location.hash.substring(1);
+    post_id = post_id.split('/')[1];
+
+    if (!post_id){
+      // backwards compatibility with query string navigation
+      post_id = getQueryStringParam('id');
+    }
+    $.get('/posts/' + post_id + '.html').then(function(data){
+      for (let i=0; i < state.posts.length; i++){
+        if (state.posts[i].id == post_id){
+          document.title = state.posts[i].title;
+          $("#article-headline").text(state.posts[i].title);
+          if (state.posts[i].guest){
+            $("#article-image").addClass("guest-image");
+            $("#preamble").css("display", "block");
+            $("#author").html(
+              'By ' + state.posts[i].author
+            );
+          }
+          else {
+            $("#article-image").removeClass("guest-image");
+            $("#preamble").css("display", "none");
+            $("#author").html('');
+          }
+          break;
+        }
+      }
+
+      $("#article-image").attr('src', '/img/' + post_id + '.png');
+      $("#article-body").html(data);
+    });
+  }
+
+  $(document).ready(function(){
+    injectPost();
+  });
+</script>
+<style>
+  sup {
+      font-size: 10px;
+  }
+  .footnotes{
+      font-size: 12px;
+  }
+  #article-headline{
+      font-size: 26px;
+      font-weight: bold;
+      width: 60%;
+      display: block;
+      margin: auto;
+      text-align: center;
+  }
+  #author{
+      font-size: 20px;
+      width: 60%;
+      display: block;
+      margin: auto;
+      text-align: center;
+  }
+  #article-body{
+  }
+  #article-image{
+      width: 60%;
+      max-width: 400px;
+      height: scale;
+      display: block;
+      margin: 50px auto 50px auto;
+      border-radius: 10px;
+      border: 1px solid black;
+  }
+
+</style>
+<div id="article-headline">
+</div>
+<div id="author">
+</div>
+<img id="article-image">
+<div id="preamble" class="article" style="display:none">
+
+  <p><i>
+      Guest post disclaimer goes here
+  </i></p>
+  <hr>
+</div>
+
+<div id="article-body" class="article">
+  Loading... if you can still see this message, this post probably doesn't exist.
+</div>
+<br><br><br><br>
+<br><br><br><br>

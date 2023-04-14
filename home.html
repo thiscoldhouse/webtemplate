@@ -1,0 +1,116 @@
+<style>
+  .post-container {
+      position: relative;
+      vertical-align: top;
+      text-align: center;
+      display: inline-block;
+      margin: auto;
+      height: auto;
+      width: 300px;
+      max-width: 90%;
+  }
+
+  .post-container a, figure {
+      text-align: center;
+      text-decoration: none;
+      color: black;
+  }
+
+  .post-container figcaption {
+      margin: 10px 0 0 0;
+      font-weight: bold;
+  }
+
+  .post-container img {
+      transition: transform 0.2s;
+      -webkit-transition: -webkit-transform 0.2s;
+      -moz-transition: -moz-transform 0.2s;
+      -o-transition: -o-transform 0.2s;
+      border: 1px #1B272A solid;
+      /* max-width: 200px; */
+      height: 200px;
+      width: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+  }
+
+  .centered{
+      display: block;
+      margin: auto;
+  }
+
+  .posts-container{
+      text-align: center;
+  }
+
+  .guest-name{
+      padding-top: 3px;
+      font-size: 16px;
+  }
+  .guest-post{
+      font-weight: bold;
+      font-variant: small-caps;
+      color: white;
+      background: black;
+      width: 200px;
+      position: absolute;
+      height: 24px;
+      z-index: 99999;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      font-size: 18px;
+      display: block;
+      margin: auto;
+      top: 16px;
+      left: 48px;
+      /* height: 59999px; */
+      border: 1px solid black;
+  }
+</style>
+<div class="posts-container">
+  <% for (let i=0; i < state.posts.length; i++){
+                       if (state.posts[state.posts.length - i - 1].publish) { %>
+     <div class="post-container">
+       <% if (state.posts[state.posts.length - i -1].guest){ %>
+       <div class="guest-post">guest post</div>
+       <% } %>
+       <a href="#!post/<%- state.posts[state.posts.length - i - 1].id -%>">
+         <figure>
+           <img src="/img/<%- state.posts[state.posts.length - i - 1].id -%>.png">
+           <figcaption>
+             <%- state.posts[state.posts.length - i - 1].title -%>
+           </figcaption>
+           <% if (state.posts[state.posts.length - i -1].guest){ %>
+           <div class="guest-name"><%- state.posts[state.posts.length - i - 1].author  -%></div>
+           <% } %>
+         </figure>
+       </a>
+     </div>
+     <% }} %>
+</div>
+<script>
+  $('title').html('The Luddite: An Anticapitalist Tech Blog');
+</script>
+<!-- <style> -->
+  <!--   #latest-entry{ -->
+  <!--       width: 80%; -->
+  <!--       display: flex; -->
+  <!--       align-items: center; -->
+  <!--       justify-content: space-evenly; -->
+  <!--       padding: 50px; -->
+  <!--   } -->
+
+  <!--   #latest-entry-text{ -->
+  <!--       padding: 10px; -->
+  <!--   } -->
+
+  <!--   #latest-entry h2{ -->
+  <!--       font-size: 30px; -->
+  <!--       font-weight: normal; -->
+  <!--   } -->
+
+  <!--   #latest-entry img{ -->
+  <!--       max-width: 50%; -->
+  <!--       height: fit-content; -->
+  <!--   } -->
+  <!-- </style> -->
